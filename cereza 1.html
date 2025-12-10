@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Feliz Aniversario — Un regalo para ti</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Armitage&family=UnifrakturCook:wght@700&display=swap');
+  </style>
+
+  <style>
+    :root{
+      --bg:#fec5e5;
+      --accent:#de3163;
+      --dark:#2b0f14;
+      --muted:#7a4550;
+    }
+
+    body{
+      margin:0;
+      padding:0;
+      font-family:'Armitage', sans-serif;
+      background: var(--bg);
+      color:#2b0f14;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:100vh;
+      overflow-x:hidden;
+      position:relative;
+    }
+
+    .wrap{
+      width:980px;
+      max-width:96%;
+      background:rgba(255,255,255,0.4);
+      backdrop-filter:blur(5px);
+      border-radius:20px;
+      box-shadow:0 0 30px #2b0f145c, 0 0 80px #00000050 inset;
+      border: 4px solid #2b0f14;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .wrap::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      border:3px double #2b0f14;
+      border-radius:16px;
+      pointer-events:none;
+      opacity:0.6;
+    }
+
+    .wrap::after{
+      content:"🦇";
+      position:absolute;
+      font-size:60px;
+      bottom:10px;
+      right:20px;
+      opacity:0.35;
+      transform:rotate(-20deg);
+      pointer-events:none;
+      animation: floatBat 4s ease-in-out infinite;
+    }
+
+    @keyframes floatBat{
+      0%,100%{ transform:translateY(0) rotate(-20deg); }
+      50%{ transform:translateY(-10px) rotate(-20deg); }
+    }
+
+    header{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      padding:20px;
+    }
+
+    .logo{
+      width:70px;
+      height:70px;
+      border-radius:50%;
+      background:radial-gradient(circle, var(--accent), #7a102c, #2b0f14);
+      color:white;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:32px;
+      box-shadow:0 0 15px #2b0f14 inset;
+      border:2px solid #2b0f14;
+    }
+
+    h1{
+      font-family:'UnifrakturCook', cursive;
+      font-size:42px;
+      margin:0;
+      color:#2b0f14;
+      text-shadow:2px 2px 0 #de3163, 4px 4px 0 #2b0f14;
+    }
+
+    .main{
+      display:grid;
+      grid-template-columns:1fr 420px;
+      gap:20px;
+      padding:20px;
+    }
+
+    .card{
+      background:rgba(255,255,255,0.4);
+      padding:18px;
+      border-radius:12px;
+      border:2px solid #2b0f14;
+      box-shadow:0 0 15px #2b0f14 inset, 0 0 10px #de3163;
+    }
+
+    .typeout{
+      line-height:1.5;
+      font-size:18px;
+    }
+
+    .btn{
+      /* Convertido a 'a' tag, pero mantenemos el estilo de botón */
+      text-decoration: none; 
+      border:3px solid #2b0f14;
+      background:linear-gradient(135deg,#ff7ca2,#de3163);
+      padding:10px 16px;
+      border-radius:12px;
+      color:white;
+      font-weight:700;
+      cursor:pointer;
+      transition:0.2s;
+      position:relative;
+      box-shadow:0 4px 0 #2b0f14;
+      animation: bounce 3s ease-in-out infinite;
+    }
+
+    @keyframes bounce{
+      0%,100%{ transform:translateY(0); }
+      50%{ transform:translateY(-5px); }
+    }
+
+    .btn::after{
+      content:"✦";
+      position:absolute;
+      top:-12px;
+      right:-10px;
+      opacity:0;
+      transition:0.3s;
+      font-size:14px;
+    }
+
+    .btn:hover{
+      transform:translateY(-4px) scale(1.05);
+      box-shadow:0 6px 0 #2b0f14;
+      filter:brightness(1.2);
+    }
+    .btn:hover::after{
+      opacity:1;
+      animation: sparkle 1s infinite;
+    }
+
+    @keyframes sparkle{
+      0%,100%{ transform:scale(1) rotate(0deg); }
+      50%{ transform:scale(1.3) rotate(20deg); }
+    }
+
+    .btn:active{
+      transform:translateY(2px);
+      box-shadow:0 2px 0 #2b0f14 inset;
+    }
+
+    .photo{
+      height:260px;
+      overflow:hidden;
+      border-radius:14px;
+      border:2px solid #2b0f14;
+      box-shadow:0 0 10px #2b0f14 inset;
+    }
+
+    .slideshow{
+      display:flex;
+      gap:8px;
+      overflow:auto;
+      padding-bottom:8px;
+    }
+
+    .slide{
+      width:100px;
+      height:70px;
+      border-radius:8px;
+      border:2px solid #2b0f14;
+      background:#ffd4e1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:12px;
+      cursor:pointer;
+      color:#2b0f14;
+    }
+
+    .music-player{
+      margin-top:12px;
+      border:2px solid var(--dark);
+      border-radius:12px;
+      background:rgba(255,255,255,0.5);
+      padding:8px;
+      text-align:center;
+    }
+
+    #playPauseBtn{
+      padding:8px 16px;
+      font-size:16px;
+      font-weight:bold;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+      background:linear-gradient(135deg,#ff7ca2,#de3163);
+      color:white;
+      box-shadow:0 3px 0 #2b0f14;
+    }
+
+    /* Estilos para el reproductor de YouTube, asegurando que solo se vea el botón si lo necesitas */
+    #player-container {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 1px; /* Casi invisible */
+        height: 1px;
+        overflow: hidden;
+        z-index: -1; /* Lo pone por debajo de todo */
+    }
+
+
+  </style>
+</head>
+
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="logo">❤</div>
+    <div>
+      <h1>Feliz aniversario, mi vida</h1>
+      <p style="color:#2b0f14; font-weight:600;">Por más momentos junto a ti</p>
+    </div>
+  </header>
+
+  <div class="main">
+
+    <div>
+      <div class="card">
+        <h2 style="font-family:'Didact Gothic';color:#2b0f14;">Para Mi Cerezita:</h2>
+        <div id="typed" class="typeout">
+          <p>Mi dulce cerezita&nbsp;</p>
+        </div>
+      </div>
+
+      <div style="height:18px"></div>
+
+      <div class="card">
+        <h3 style="font-family:'Didact Gothic';color:#2b0f14;">Pequeños juegos</h3>
+        <p style="color:#2b0f14;">Pulsa el corazón para ver los juegos.</p>
+        <a href="menu.html" class="btn">♡</a>
+      </div>
+    </div>
+
+    <aside>
+      <div class="photo card">
+        <img src= fa66d198-8009-47bc-80e6-c25e462f861e.jpg style="width:100%;height:100%;object-fit:cover;">
+      </div>
+
+      <a href="galeria.html" class="btn" style="margin-top:8px; display:inline-block;">🖼️ Galería</a>
+      <input type="file" id="photoInput" style="display:none;">
+
+
+      <div class="music-player">
+        <button id="playPauseBtn">▶ Reproducir / Pausar</button>
+        <p style="font-size:12px; margin: 4px 0 0;">(Click para iniciar la playlist de fondo)</p>
+      </div>
+
+    </aside>
+
+  </div>
+</div>
+
+<script src="https://www.youtube.com/watch?v=ZRVIVpgAraA&list=RDZRVIVpgAraA&start_radio=1&pp=ygUVYnJpbGxhcyBsZW9uIGxhcnJlZ3VpoAcB"></script>
+
+<div id="player-container">
+    <div id="player"></div>
+</div>
+
+<script>
+// La lista de canciones ya está bien, solo necesitas cambiar los Video IDs si quieres otra música.
+const songs = [
+  "Vm3JI3r2vGM",
+  "ZhIsAZO5gl0",
+  "K2tbQ_g2VbQ",
+  "RQzlSXwHOJg",
+  "SSP3UvM62Ds",
+  "MzNduKt0ylU",
+  "R6_jFe6DmkY"
+];
+
+let currentSong = 0;
+let player;
+
+// Función que se llama cuando la API de YouTube está lista
+function onYouTubeIframeAPIReady() {
+  player = new YT.Player('player', {
+    height: '80',
+    width: '100%',
+    videoId: songs[currentSong],
+    playerVars: {
+      'controls': 0, // Oculta los controles nativos
+      'modestbranding': 1,
+      'rel': 0,
+      'showinfo': 0,
+      'autoplay': 0 // Se inicia con el botón por las políticas de los navegadores
+    },
+    events: {
+      'onStateChange': onPlayerStateChange
+    }
+  });
+}
+
+// Lógica para avanzar a la siguiente canción al terminar
+function onPlayerStateChange(event) {
+  if(event.data === YT.PlayerState.ENDED){
+    currentSong++;
+    if(currentSong >= songs.length) currentSong = 0;
+    player.loadVideoById(songs[currentSong]);
+  }
+}
+
+// Lógica para el botón de Play/Pause
+const playPauseBtn = document.getElementById('playPauseBtn');
+playPauseBtn.addEventListener('click', ()=>{
+  const state = player.getPlayerState();
+  if(state === YT.PlayerState.PLAYING){
+    player.pauseVideo();
+    playPauseBtn.textContent = '▶ Reproducir / Pausar';
+  } else {
+    player.playVideo();
+    playPauseBtn.textContent = '⏸ Reproducir / Pausar';
+  }
+});
+
+/* LÓGICA DE FOTOS (Se mantiene) */
+const mainPhoto = document.getElementById('mainPhoto');
+const photoInput = document.getElementById('photoInput');
+const slideshow = document.getElementById('slideshow');
+// NOTA: 'slideshow' no está en tu HTML, pero se mantiene en el script
+// por si planeas añadirlo más adelante.
+
+photoInput.addEventListener('change', e=>{
+  const f = e.target.files[0];
+  if(!f) return;
+  const url = URL.createObjectURL(f);
+  mainPhoto.src = url;
+
+  // Si tuvieras un div con id="slideshow" descomenta el siguiente bloque
+  /*
+  const el = document.createElement('div');
+  el.className = "slide";
+  el.style.background = `url(${url}) center/cover`;
+  el.addEventListener('click', ()=> mainPhoto.src = url);
+  slideshow.appendChild(el);
+  */
+});
+</script>
+
+</body>
+</html>
+

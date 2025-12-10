@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Mini Juego de Amor — Gótico Kawaii</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Armitage&family=UnifrakturCook:wght@700&display=swap');
+
+:root{
+  --bg:#fec5e5;
+  --accent:#de3163;
+  --dark:#2b0f14;
+  --muted:#7a4550;
+}
+
+/* General */
+body{
+  margin:0;
+  padding:0;
+  font-family:'Armitage', sans-serif;
+  background: var(--bg);
+  color:#2b0f14;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+  overflow:hidden;
+}
+
+/* Container */
+.wrap{
+  width:800px;
+  max-width:96%;
+  background:rgba(255,255,255,0.4);
+  backdrop-filter:blur(5px);
+  border-radius:20px;
+  border:4px solid var(--dark);
+  box-shadow:0 0 30px var(--dark)50, 0 0 80px var(--dark)50 inset;
+  padding:20px;
+  position:relative;
+}
+
+/* Header */
+header{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  padding-bottom:20px;
+  border-bottom:2px solid var(--dark);
+}
+
+.logo{
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  background:radial-gradient(circle, var(--accent), #7a102c, var(--dark));
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:32px;
+  box-shadow:0 0 15px var(--dark) inset;
+  border:2px solid var(--dark);
+}
+
+h1{
+  font-family:'UnifrakturCook', cursive;
+  font-size:36px;
+  margin:0;
+  color:var(--dark);
+  text-shadow:2px 2px 0 var(--accent), 4px 4px 0 var(--dark);
+}
+
+/* Mini juego */
+#gameContainer{
+  position:relative;
+  width:100%;
+  height:350px;
+  background:#fde0eb;
+  border:2px solid var(--dark);
+  border-radius:16px;
+  overflow:hidden;
+  margin-top:20px;
+}
+
+/* Corazones */
+.heart{
+  position:absolute;
+  font-size:28px;
+  cursor:pointer;
+  user-select:none;
+  animation: floatHeart 4s linear infinite;
+}
+
+@keyframes floatHeart{
+  0%{ transform:translateY(-30px) rotate(0deg); }
+  50%{ transform:translateY(160px) rotate(15deg); }
+  100%{ transform:translateY(350px) rotate(-15deg); }
+}
+
+/* Botones kawaii */
+.btn{
+  border:3px solid var(--dark);
+  background:linear-gradient(135deg,#ff7ca2,var(--accent));
+  padding:12px 20px;
+  border-radius:12px;
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+  transition:0.2s;
+  position:relative;
+  box-shadow:0 4px 0 var(--dark);
+  animation: bounce 3s ease-in-out infinite;
+  margin-top:12px;
+}
+
+@keyframes bounce{
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(-5px); }
+}
+
+.btn:hover{
+  transform:translateY(-4px) scale(1.05);
+  box-shadow:0 6px 0 var(--dark);
+  filter:brightness(1.2);
+}
+
+.btn:active{
+  transform:translateY(2px);
+  box-shadow:0 2px 0 var(--dark) inset;
+}
+
+/* Score */
+#score{
+  font-weight:bold;
+  margin-top:12px;
+  font-size:18px;
+  color:var(--dark);
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">❤</div>
+    <div>
+      <h1>Mini Juego de Amor</h1>
+      <p style="color:var(--dark); font-weight:600;">Atrapa los corazones y gana puntos 💖</p>
+    </div>
+  </header>
+
+  <div id="gameContainer"></div>
+  <div id="score">Puntos: 0</div>
+  <button class="btn" id="startGame">Iniciar Juego</button>
+</div>
+
+<script>
+const gameContainer = document.getElementById('gameContainer');
+const startGameBtn = document.getElementById('startGame');
+const scoreEl = document.getElementById('score');
+let score = 0;
+let gameInterval;
+
+function createHeart(){
+  const heart = document.createElement('div');
+  heart.className = 'heart';
+  heart.style.left = Math.random()*(gameContainer.offsetWidth-30)+'px';
+  heart.textContent = '💖';
+  gameContainer.appendChild(heart);
+
+  heart.addEventListener('click', ()=>{
+    score += 1;
+    scoreEl.textContent = "Puntos: "+score;
+    heart.remove();
+  });
+
+  setTimeout(()=>heart.remove(),4000);
+}
+
+startGameBtn.addEventListener('click', ()=>{
+  score = 0;
+  scoreEl.textContent = "Puntos: 0";
+  clearInterval(gameInterval);
+  gameInterval = setInterval(createHeart, 800);
+});
+</script>
+</body>
+</html>
+

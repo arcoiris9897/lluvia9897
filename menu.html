@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Menú de Juegos — Gótico Kawaii</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Armitage&family=UnifrakturCook:wght@700&display=swap');
+
+/* Colores y variables */
+:root{
+  --bg:#fec5e5;
+  --accent:#de3163;
+  --dark:#2b0f14;
+  --muted:#7a4550;
+}
+
+/* General */
+body{
+  margin:0;
+  padding:0;
+  font-family:'Armitage', sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+}
+
+/* Contenedor principal */
+.wrap{
+  width:800px;
+  max-width:96%;
+  background:rgba(255,255,255,0.4);
+  backdrop-filter:blur(5px);
+  border-radius:20px;
+  border:4px solid var(--dark);
+  box-shadow:0 0 30px var(--dark)50, 0 0 80px var(--dark)50 inset;
+  padding:30px;
+  text-align:center;
+  position:relative;
+}
+
+/* Header */
+header{
+  margin-bottom:30px;
+}
+
+.logo{
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  background:radial-gradient(circle, var(--accent), #7a102c, var(--dark));
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:32px;
+  margin:0 auto 10px auto;
+  box-shadow:0 0 15px var(--dark) inset;
+  border:2px solid var(--dark);
+}
+
+h1{
+  font-family:'UnifrakturCook', cursive;
+  font-size:36px;
+  margin:0;
+  color: var(--dark);
+  text-shadow:2px 2px 0 var(--accent), 4px 4px 0 var(--dark);
+}
+
+/* Botones kawaii para el menú */
+.menu-btn{
+  display:block;
+  width:200px;
+  margin:20px auto;
+  padding:15px 20px;
+  border:3px solid var(--dark);
+  border-radius:12px;
+  background:linear-gradient(135deg,#ff7ca2,var(--accent));
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+  font-size:18px;
+  position:relative;
+  box-shadow:0 4px 0 var(--dark);
+  transition:0.2s;
+  animation: bounce 3s ease-in-out infinite;
+}
+
+@keyframes bounce{
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(-5px); }
+}
+
+.menu-btn:hover{
+  transform:translateY(-4px) scale(1.05);
+  box-shadow:0 6px 0 var(--dark);
+  filter:brightness(1.2);
+}
+
+.menu-btn:active{
+  transform:translateY(2px);
+  box-shadow:0 2px 0 var(--dark) inset;
+}
+
+/* Pie de página */
+footer{
+  margin-top:30px;
+  font-size:14px;
+  color:var(--dark);
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">❤</div>
+    <h1>Menú de Juegos</h1>
+    <p style="font-family:'Didact Gothic'; font-weight:600; color:var(--dark);">Selecciona tu mini juego favorito</p>
+  </header>
+
+<div>
+    <a href="minijuego de amor 2.html" class="menu-btn">💖 Mini Juego de Amor</a> 
+    
+    <a href="puzzle romantico.html" class="menu-btn">🖤 Puzzle Romántico</a>
+    
+    <a href="trivia del amor 2.html" class="menu-btn">💌 Trivia del Amor</a>
+    
+    <a href="memoria de corazones.html" class="menu-btn">❤️ Memoria de Corazones</a>
+	 <a href="tiburoncin.html" class="menu-btn">🖤Tiburon recolector de almas</a>
+</div>
+  <footer>
+  </footer>
+</div>
+</body>
+</html>
+

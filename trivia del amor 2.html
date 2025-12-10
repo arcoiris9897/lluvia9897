@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trivia del Amor Gótico-Kawaii</title>
+
+<!-- Tipografía gótica -->
+<link href="https://fonts.googleapis.com/css2?family=Armitage&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #fec5e5;
+  --accent: #de3163;
+  --dark: #2b0f14;
+  --highlight: #ff7ca2;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  font-family: 'Armitage', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  color: var(--dark);
+}
+
+.trivia-container {
+  background: rgba(255,255,255,0.2);
+  border: 4px solid var(--dark);
+  border-radius: 16px;
+  box-shadow: 0 0 30px rgba(43,15,20,0.5), inset 0 0 60px rgba(43,15,20,0.3);
+  padding: 20px;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+}
+
+.trivia-container::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  background: url('https://i.etsystatic.com/41822954/r/il/5e5afc/6292211918/il_570xN.6292211918_k4np.jpg') center/cover no-repeat;
+  opacity: 0.3;
+  z-index: 0;
+}
+
+.trivia-content {
+  position: relative;
+  z-index: 1;
+  backdrop-filter: blur(3px);
+}
+
+h1 {
+  font-family:'Armitage', sans-serif;
+  color: var(--dark);
+  text-shadow: 1px 1px var(--accent);
+}
+
+button {
+  display: inline-block;
+  padding: 10px 18px;
+  border: 3px solid var(--dark);
+  background: linear-gradient(135deg, #ff7ca2, var(--accent));
+  color: white;
+  border-radius: 12px;
+  font-family:'Armitage', sans-serif;
+  font-weight: bold;
+  margin: 8px 0;
+  box-shadow: 0 4px 0 var(--dark);
+  cursor: pointer;
+  transition: transform 0.2s, filter 0.2s;
+}
+
+button:hover {
+  transform: translateY(-3px) scale(1.05);
+  filter: brightness(1.15);
+}
+
+.option {
+  display: block;
+  margin: 8px 0;
+  transition: all 0.2s;
+}
+
+.option.selected {
+  background: linear-gradient(135deg, #ffb6c1, #ff7ca2);
+  box-shadow: 0 0 15px #ff7ca2;
+  transform: scale(1.05);
+}
+
+#result {
+  display: none;
+  margin-top: 20px;
+}
+
+#result h2 {
+  font-family:'Armitage', sans-serif;
+  font-size: 2em;
+  color: var(--accent);
+  text-shadow: 2px 2px var(--dark);
+}
+</style>
+</head>
+<body>
+
+<div class="trivia-container">
+  <div class="trivia-content" id="triviaContent">
+    <h1>Trivia del Amor ❤️</h1>
+    <div id="question"></div>
+    <div id="options"></div>
+    <button id="nextBtn">Siguiente Pregunta</button>
+  </div>
+</div>
+
+<div id="result">
+  <h2>¡Eres maravillosa! 💖</h2>
+</div>
+
+<script>
+// Preguntas
+const questions = [
+  {
+    q: "Si fueras una flor, ¿cuál sería?",
+    options: ["Rosa", "Tulipan", "Orquídea", "Girasol"]
+  },
+  {
+    q: "¿Cuál es tu recuerdo favorito juntos?",
+    options: ["Nuestro primer beso", "La primera cita", "Hacer hotcakes juntas", "Todas las anteriores"]
+  },
+  {
+    q: "¿Qué genero musical describe mejor nuestro amor?",
+    options: ["Una balada romántica", "Una canción alegre", "Una canción triste", "Pop"]
+  },
+  {
+    q: "¿Cuál es nuestro apodo secreto?",
+    options: ["Cariño", "Mi vida", "Esposa", "Cerezita","Copo de nieve"]
+  }
+];
+
+let current = 0;
+let answers = [];
+
+const questionEl = document.getElementById('question');
+const optionsEl = document.getElementById('options');
+const nextBtn = document.getElementById('nextBtn');
+const triviaContent = document.getElementById('triviaContent');
+const resultEl = document.getElementById('result');
+
+function showQuestion() {
+  const q = questions[current];
+  questionEl.textContent = q.q;
+  optionsEl.innerHTML = "";
+
+  q.options.forEach((opt, idx) => {
+    const btn = document.createElement('button');
+    btn.textContent = opt;
+    btn.classList.add('option');
+    btn.onclick = () => selectAnswer(idx, btn);
+    optionsEl.appendChild(btn);
+  });
+}
+
+function selectAnswer(idx, btn) {
+  if(btn.classList.contains('selected')) return;
+  btn.classList.add('selected');
+  answers[current] = questions[current].options[idx];
+  // Bloquear demás botones
+  [...optionsEl.children].forEach(b => {
+    if(b !== btn) b.disabled = true;
+  });
+}
+
+nextBtn.addEventListener('click', () => {
+  current++;
+  if(current < questions.length){
+    showQuestion();
+  } else {
+    triviaContent.style.display = 'none';
+    resultEl.style.display = 'block';
+    console.log("Respuestas seleccionadas:", answers);
+  }
+});
+
+// Inicializar
+showQuestion();
+</script>
+
+</body>
+</html>

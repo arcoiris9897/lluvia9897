@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Galería con vista grande</title>
+
+<style>
+body {
+  font-family:'Armitage', sans-serif;
+  background:#fec5e5;
+  display:flex;
+  justify-content:center;
+  padding:20px;
+}
+
+.wrap {
+  width:900px;
+  background:rgba(255,255,255,0.4);
+  padding:20px;
+  border-radius:16px;
+  border:4px solid #2b0f14;
+}
+
+h1 {
+  font-family:'UnifrakturCook', cursive;
+  text-align:center;
+  color:#2b0f14;
+  text-shadow:2px 2px 0 #de3163, 4px 4px 0 #2b0f14;
+}
+
+.big-photo {
+  width:100%;
+  height:400px;
+  object-fit:cover;
+  border-radius:12px;
+  border:4px solid #2b0f14;
+  box-shadow:0 0 15px #2b0f14 inset, 0 0 10px #de3163;
+  margin-bottom:16px;
+}
+
+.thumbnails {
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-bottom:16px;
+}
+
+.thumbnail {
+  width:120px;
+  height:80px;
+  border:3px solid #2b0f14;
+  border-radius:12px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:0.3s;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:relative;
+}
+
+.thumbnail img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.thumbnail.selected {
+  transform:scale(1.05);
+  box-shadow:0 0 15px #de3163, 0 0 10px #2b0f14 inset;
+}
+
+.btn {
+  display:inline-block;
+  margin-bottom:16px;
+  padding:10px 16px;
+  font-weight:bold;
+  color:white;
+  border-radius:12px;
+  background:linear-gradient(135deg,#ff7ca2,#de3163);
+  border:3px solid #2b0f14;
+  cursor:pointer;
+}
+
+/* Botón de eliminar */
+.delete-btn {
+  position:absolute;
+  top:5px;
+  right:5px;
+  background:#de3163;
+  color:white;
+  border:2px solid #2b0f14;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:bold;
+  padding:2px 6px;
+  z-index:5;
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <h1>Galería</h1>
+
+  <!-- Botón para añadir fotos -->
+  <label class="btn" for="photoInput">📷 Añadir fotos</label>
+  <input type="file" id="photoInput" multiple accept="image/*" style="display:none;">
+
+  <!-- Botón para guardar la galería -->
+  <button class="btn" id="saveGalleryBtn">💾 Guardar galería</button>
+
+  <!-- Galería de miniaturas -->
+  <div class="thumbnails" id="thumbnails">
+    <!-- Estas imágenes iniciales YA no se cargarán si hay datos guardados -->
+    <div class="thumbnail"><img src="a35ecfa2-59a7-4ad9-9f60-82cecb52cecb.jpg" alt=""/></div>
+    <div class="thumbnail"><img src="e584cefe-66e8-4899-b4fc-2f4ef20f2535.jpg" alt=""/></div>
+    <div class="thumbnail"><img src="43c9c895-7750-48ad-86c8-ccc1bb614c08.jpg" alt=""/></div>
+    <div class="thumbnail"><img src="4ffeb0a8-dd7a-4ff2-b3e5-27cb0a3ba191.jpg" alt=""/></div>
+  </div>
+</div>
+
+<script>
+const photoInput = document.getElementById('photoInput');
+const thumbnails = document.getElementById('thumbnails');
+const saveGalleryBtn = document.getElementById('saveGalleryBtn');
+
+/* Convertir archivo a Base64 */
+function fileToBase64(file) {
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.readAsDataURL(file);
+  });
+}
+
+/* Crear miniatura con botón ❌ */
+function addThumbnail(url) {
+  const thumb = document.createElement("div");
+  thumb.className = "thumbnail";
+
+  const img = document.createElement("img");
+  img.src = url;
+  thumb.appendChild(img);
+
+  // Botón de eliminar
+  const del = document.createElement("button");
+  del.textContent = "❌";
+  del.className = "delete-btn";
+
+  del.addEventListener("click", () => {
+    thumb.remove();
+    saveGallery();
+  });
+
+  thumb.appendChild(del);
+  thumbnails.appendChild(thumb);
+}
+
+/* Al subir fotos */
+photoInput.addEventListener("change", async e => {
+  const files = Array.from(e.target.files);
+
+  for (const file of files) {
+    const base64 = await fileToBase64(file);
+    addThumbnail(base64);
+  }
+});
+
+/* Guardar galería */
+function saveGallery() {
+  const images = Array.from(thumbnails.querySelectorAll("img")).map(img => img.src);
+  localStorage.setItem("savedGallery", JSON.stringify(images));
+}
+
+saveGalleryBtn.addEventListener("click", () => {
+  saveGallery();
+  alert("Galería guardada permanentemente.");
+});
+
+/* Cargar galería */
+window.addEventListener("load", () => {
+  const saved = JSON.parse(localStorage.getItem("savedGallery") || "[]");
+
+  if (saved.length > 0) {
+    thumbnails.innerHTML = ""; // borrar miniaturas iniciales
+    saved.forEach(url => addThumbnail(url));
+  }
+});
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Puzzle Gótico‑Sáfico</title>
+
+<!-- Tipografía gótica -->
+<link href="https://fonts.googleapis.com/css2?family=Armitage&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #fec5e5;
+  --accent: #de3163;
+  --dark: #2b0f14;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  font-family: 'Armitage', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: var(--dark);
+  overflow-x: hidden;
+}
+
+.puzzle-container {
+  position: relative;
+  width: 90%;
+  max-width: 600px;
+  border: 4px solid var(--dark);
+  border-radius: 16px;
+  box-shadow: 0 0 30px rgba(43,15,20,0.5), inset 0 0 60px rgba(43,15,20,0.3);
+  overflow: hidden;
+  background: rgba(255,255,255,0.2);
+}
+
+.puzzle-container::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  background: url('https://i.etsystatic.com/41822954/r/il/5e5afc/6292211918/il_570xN.6292211918_k4np.jpg') center/cover no-repeat;
+  opacity: 0.6;
+  z-index: 0;
+}
+
+.puzzle-content {
+  position: relative;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+  z-index: 1;
+}
+
+h1 {
+  font-family:'Armitage', sans-serif;
+  text-align: center;
+  color: var(--dark);
+  text-shadow: 1px 1px var(--accent);
+}
+
+#puzzle {
+  display: grid;
+  gap: 2px;
+  margin-top: 20px;
+  border: 2px solid var(--dark);
+  border-radius: 12px;
+  user-select: none;
+}
+
+.piece {
+  width: 100%;
+  padding-bottom: 100%; /* cuadrado */
+  background-size: cover;
+  background-position: center;
+  border: 1px solid var(--dark);
+  cursor: grab;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+
+.piece.dragging {
+  opacity: 0.7;
+  transform: scale(1.1);
+  z-index: 10;
+}
+
+button {
+  display: inline-block;
+  padding: 10px 18px;
+  border: 3px solid var(--dark);
+  background: linear-gradient(135deg, #ff7ca2, var(--accent));
+  color: white;
+  border-radius: 12px;
+  text-decoration: none;
+  font-family:'Armitage', sans-serif;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-right: 10px;
+  box-shadow: 0 4px 0 var(--dark);
+  transition: transform 0.2s, filter 0.2s;
+}
+
+button:hover {
+  transform: translateY(-4px) scale(1.05);
+  filter: brightness(1.15);
+}
+
+/* Mensaje de felicitación */
+#congrats {
+  position: absolute;
+  inset:0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family:'Armitage', sans-serif;
+  font-size: 2em;
+  color: #ff1493;
+  text-shadow: 2px 2px var(--dark);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s;
+  z-index: 20;
+}
+</style>
+</head>
+<body>
+
+<div class="puzzle-container">
+  <div class="puzzle-content">
+    <h1>Puzzle Romántico</h1>
+    <div id="puzzle"></div>
+    <div style="text-align:center;">
+      <button id="shuffleBtn">Mezclar piezas</button>
+      <button id="finishBtn">Finalizar</button>
+    </div>
+  </div>
+  <div id="congrats"></div>
+</div>
+
+<script>
+const rows = 3;
+const cols = 3;
+const puzzleEl = document.getElementById('puzzle');
+const shuffleBtn = document.getElementById('shuffleBtn');
+const finishBtn = document.getElementById('finishBtn');
+const congratsEl = document.getElementById('congrats');
+const imageURL = 'https://i.etsystatic.com/41822954/r/il/5e5afc/6292211918/il_570xN.6292211918_k4np.jpg';
+let pieces = [];
+let draggedPiece = null;
+
+// Crear piezas
+for(let r=0;r<rows;r++){
+  for(let c=0;c<cols;c++){
+    const piece = document.createElement('div');
+    piece.classList.add('piece');
+    piece.style.backgroundImage = `url(${imageURL})`;
+    piece.style.backgroundSize = `${cols*100}% ${rows*100}%`;
+    piece.style.backgroundPosition = `${(-c*100)/(cols-1)}% ${(-r*100)/(rows-1)}%`;
+    piece.dataset.row = r;
+    piece.dataset.col = c;
+
+    piece.setAttribute('draggable', true);
+    piece.addEventListener('dragstart', dragStart);
+    piece.addEventListener('dragover', dragOver);
+    piece.addEventListener('drop', dropPiece);
+    piece.addEventListener('dragend', dragEnd);
+
+    puzzleEl.appendChild(piece);
+    pieces.push(piece);
+  }
+}
+
+puzzleEl.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+
+// Drag & Drop
+function dragStart(e){
+  draggedPiece = e.currentTarget;
+  draggedPiece.classList.add('dragging');
+}
+
+function dragOver(e){
+  e.preventDefault();
+}
+
+function dropPiece(e){
+  e.preventDefault();
+  const target = e.currentTarget;
+  if(target === draggedPiece) return;
+
+  const tempRow = draggedPiece.dataset.row;
+  const tempCol = draggedPiece.dataset.col;
+  draggedPiece.dataset.row = target.dataset.row;
+  draggedPiece.dataset.col = target.dataset.col;
+  target.dataset.row = tempRow;
+  target.dataset.col = tempCol;
+
+  updateGrid();
+}
+
+function dragEnd(){
+  draggedPiece.classList.remove('dragging');
+  draggedPiece = null;
+}
+
+function updateGrid(){
+  pieces.forEach(p=>{
+    p.style.order = parseInt(p.dataset.row)*cols + parseInt(p.dataset.col);
+  });
+}
+
+shuffleBtn.addEventListener('click', ()=>{
+  for(let i=0;i<100;i++){
+    const a = pieces[Math.floor(Math.random()*pieces.length)];
+    const b = pieces[Math.floor(Math.random()*pieces.length)];
+    const tempRow = a.dataset.row;
+    const tempCol = a.dataset.col;
+    a.dataset.row = b.dataset.row;
+    a.dataset.col = b.dataset.col;
+    b.dataset.row = tempRow;
+    b.dataset.col = tempCol;
+  }
+  updateGrid();
+  congratsEl.style.opacity = 0; // Ocultar mensaje si se mezcla
+});
+
+// Botón finalizar
+finishBtn.addEventListener('click', ()=>{
+  // Mostrar frase
+  const phrases = ["¡Genial!", "Eres la mejor", "Te amo ❤️", "¡Perfecto, mi amor!"];
+  const phrase = phrases[Math.floor(Math.random()*phrases.length)];
+  congratsEl.textContent = phrase;
+  congratsEl.style.opacity = 1;
+});
+
+updateGrid();
+</script>
+
+</body>
+</html>
